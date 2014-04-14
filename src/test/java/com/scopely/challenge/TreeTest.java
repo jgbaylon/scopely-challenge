@@ -6,12 +6,80 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-public class TreeTest {
+public class TreeTest extends AbstractTest {
 
     @Test
-    public void insertSingleNodes() {
+    public void constructor_FullPathIsNull() {
+        //given
+        String fullPath = null;
+
+        try {
+            //when
+            new Tree(fullPath);
+            fail();
+        } catch (IllegalArgumentException iae) {
+            //then
+            assertEquals("fullPath cannot be null", iae.getMessage());
+        } catch (Exception e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void constructor_FullPathIsEmpty() {
+        //given
+        String fullPath = "";
+
+        try {
+            //when
+            new Tree(fullPath);
+            fail();
+        } catch (IllegalArgumentException iae) {
+            //then
+            assertEquals("fullPath cannot be empty", iae.getMessage());
+        } catch (Exception e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void constructor_FullPathIsContainsMultipleNodes() {
+        //given
+        String fullPath = "root1|root2";
+
+        try {
+            //when
+            new Tree(fullPath);
+            fail();
+        } catch (IllegalArgumentException iae) {
+            //then
+            assertEquals("multiple root nodes are not allowed", iae.getMessage());
+        } catch (Exception e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void constructor_FullPathListIsNull() {
+        //given
+        List<String> fullPathList = null;
+
+        try {
+            //when
+            new Tree(fullPathList);
+            fail();
+        } catch (IllegalArgumentException iae) {
+            //then
+            assertEquals("fullPathList cannot be null", iae.getMessage());
+        } catch (Exception e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void insertSingleNodes_FullPath() {
         //given
         Tree tree = new Tree("/home/sports/basketball/NCAA");
         String expectedTree =
@@ -24,6 +92,7 @@ public class TreeTest {
                 "    -rap\n" +
                 "      -gangster\n" +
                 "    -rock";
+
         //when
         List<String> fullPathList = Arrays.asList(
                 "/home/sports/football",
@@ -40,7 +109,70 @@ public class TreeTest {
     }
 
     @Test
-    public void insertDualLeafNodes() {
+    public void insertSingleNodes_FullPathList() {
+        //given
+        Tree tree = new Tree("/home/sports/basketball/NCAA");
+        String expectedTree =
+                "home\n" +
+                "  -sports\n" +
+                "    -basketball\n" +
+                "      -NCAA\n" +
+                "    -football\n" +
+                "  -music\n" +
+                "    -rap\n" +
+                "      -gangster\n" +
+                "    -rock";
+
+        //when
+        List<String> fullPathList = Arrays.asList(
+                "/home/sports/football",
+                "/home/music/rap",
+                "/home/music/rock",
+                "/home/music/rap/gangster");
+            tree.insertSingleNodes(fullPathList);
+
+        //then
+        assertEquals(expectedTree, tree.toString());
+        System.out.println(tree);
+    }
+
+    @Test
+    public void insertSingleNodes_FullPathListIsNull() {
+        //given
+        Tree tree = new Tree("/home/sports/basketball/NCAA");
+
+        try {
+            //when
+            List<String> fullPathList = null;
+            tree.insertSingleNodes(fullPathList);
+            fail();
+        } catch (IllegalArgumentException iae) {
+            //then
+            assertEquals("fullPathList cannot be null", iae.getMessage());
+        } catch (Exception e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void insertSingleNodes_RootValueIsDifferent() {
+        //given
+        Tree tree = new Tree("/home/sports/basketball/NCAA");
+
+        try {
+            //when
+            tree.insertSingleNodes("/root/sports/basketball/NCAA");
+            fail();
+        } catch (IllegalArgumentException iae) {
+            //then
+            assertEquals("root value is different", iae.getMessage());
+        } catch (Exception e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void insertDualLeafNodes_FullPath() {
         //given
         List<String> fullPathList = Arrays.asList(
                 "/home/sports/basketball/NCAA",
@@ -69,7 +201,55 @@ public class TreeTest {
     }
 
     @Test
-    public void insertMultipleNodes_CombinatorialLeafNodes() {
+    public void insertDualLeafNodes_FullPathList() {
+        //given
+        List<String> initialFullPathList = Arrays.asList(
+                "/home/sports/basketball/NCAA",
+                "/home/sports/football",
+                "/home/music/rap",
+                "/home/music/rock");
+        Tree tree = new Tree(initialFullPathList);
+        String expectedTree =
+                "home\n" +
+                "  -sports\n" +
+                "    -basketball\n" +
+                "      -NCAA\n" +
+                "    -football\n" +
+                "      -NFL\n" +
+                "      -NCAA\n" +
+                "  -music\n" +
+                "    -rap\n" +
+                "    -rock";
+
+        //when
+        List<String> insertFullPathList = Arrays.asList("/home/sports/football/NFL|NCAA");
+        tree.insertDualLeafNodes(insertFullPathList);
+
+        //then
+        assertEquals(expectedTree, tree.toString());
+        System.out.println(tree);
+    }
+
+    @Test
+    public void insertDualLeafNodes_FullPathListIsNull() {
+        //given
+        Tree tree = new Tree("/home/sports/basketball/NCAA");
+
+        try {
+            //when
+            List<String> fullPathList = null;
+            tree.insertDualLeafNodes(fullPathList);
+            fail();
+        } catch (IllegalArgumentException iae) {
+            //then
+            assertEquals("fullPathList cannot be null", iae.getMessage());
+        } catch (Exception e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void insertComboNodes_FullPath_CombinatorialLeafNodes() {
         //given
         Tree tree = new Tree("/home/music");
         String expectedTree =
@@ -84,7 +264,7 @@ public class TreeTest {
                 "    -pop";
 
         //when
-        tree.insertMultipleNodes("/home/music/rap|rock|pop");
+        tree.insertComboNodes("/home/music/rap|rock|pop");
 
         //then
         assertEquals(expectedTree, tree.toString());
@@ -92,7 +272,7 @@ public class TreeTest {
     }
 
     @Test
-    public void insertMultipleNodes_CombinatorialNodesAtAnyLevel() {
+    public void insertComboNodes_FullPath_CombinatorialNodesAtAnyLevel() {
         //given
         Tree tree = new Tree("/home");
         String expectedTree =
@@ -111,7 +291,7 @@ public class TreeTest {
                 "    -favorites";
 
         //when
-        tree.insertMultipleNodes("/home/sports|music/misc|favorites");
+        tree.insertComboNodes("/home/sports|music/misc|favorites");
 
         //then
         assertEquals(expectedTree, tree.toString());
@@ -119,11 +299,53 @@ public class TreeTest {
     }
 
     @Test
+    public void insertComboNodes_FullPathList() {
+        //given
+        Tree tree = new Tree("/home/music");
+        String expectedTree =
+                "home\n" +
+                "  -music\n" +
+                "    -rap\n" +
+                "    -rap-rock\n" +
+                "    -rap-rock-pop\n" +
+                "    -rap-pop\n" +
+                "    -rock\n" +
+                "    -rock-pop\n" +
+                "    -pop";
+
+        //when
+        List<String> fullPathList = Arrays.asList("/home/music/rap|rock|pop");
+        tree.insertComboNodes(fullPathList);
+
+        //then
+        assertEquals(expectedTree, tree.toString());
+        System.out.println(tree);
+    }
+
+    @Test
+    public void insertComboNodes_FullPathListIsNull() {
+        //given
+        Tree tree = new Tree("/home/sports/basketball/NCAA");
+
+        try {
+            //when
+            List<String> fullPathList = null;
+            tree.insertComboNodes(fullPathList);
+            fail();
+        } catch (IllegalArgumentException iae) {
+            //then
+            assertEquals("fullPathList cannot be null", iae.getMessage());
+        } catch (Exception e) {
+            fail();
+        }
+    }
+
+    @Test
     public void collapseCombinatorialTreeToPath() {
         //given
         String expectedPath = "/home/sports|music/misc|favorites";
         Tree tree = new Tree("/home");
-        tree.insertMultipleNodes(expectedPath);
+        tree.insertComboNodes(expectedPath);
 
         //when
         String actualPath = tree.collapseCombinatorialTreeToPath();
@@ -137,12 +359,28 @@ public class TreeTest {
     public void pathsAreSynonyms() {
         //given
         Tree tree = new Tree("/home");
-        tree.insertMultipleNodes("/home/sports|music/misc|favorites");
+        tree.insertComboNodes("/home/sports|music/misc|favorites");
 
         //when
         boolean pathsAreSynonyms = tree.pathsAreSynonyms("/home/sports", "/home/music");
 
-        assertTrue(pathsAreSynonyms);
+        //then
+        assertEquals(true, pathsAreSynonyms);
+        System.out.println(pathsAreSynonyms);
+    }
+
+    @Test
+    public void pathsAreNotSynonyms() {
+        //given
+        Tree tree = new Tree("/home");
+        tree.insertComboNodes("/home/sports|music/misc|favorites");
+        tree.insertComboNodes("/home/entertainment/misc");
+
+        //when
+        boolean pathsAreSynonyms = tree.pathsAreSynonyms("/home/sports", "/home/entertainment");
+
+        //then
+        assertEquals(false, pathsAreSynonyms);
         System.out.println(pathsAreSynonyms);
     }
 

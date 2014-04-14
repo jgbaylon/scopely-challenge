@@ -2,6 +2,8 @@ package com.scopely.challenge.builder;
 
 public class StringValueBuilderImpl implements ValueBuilder<String, String> {
 
+    private static final String DASH = "-";
+
     private StringBuilder builder = new StringBuilder();
 
     /**
@@ -10,8 +12,11 @@ public class StringValueBuilderImpl implements ValueBuilder<String, String> {
      * @return
      */
     @Override
-    public ValueBuilder<String, String> append(String value) {
-        builder.append(value).append("-");
+    public ValueBuilder<String, String> append(final String value) {
+        if (value == null || value.length() == 0) {
+            throw new IllegalArgumentException("value cannot be null or empty");
+        }
+        builder.append(value).append(DASH);
         return this;
     }
 
@@ -21,7 +26,7 @@ public class StringValueBuilderImpl implements ValueBuilder<String, String> {
      */
     @Override
     public String build() {
-        builder.deleteCharAt(builder.lastIndexOf("-"));
+        builder.deleteCharAt(builder.lastIndexOf(DASH));
         return builder.toString();
     }
 

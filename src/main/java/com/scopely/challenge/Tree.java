@@ -9,7 +9,8 @@ import java.util.Set;
 public class Tree {
 
     private static final String DELIMITER = "/";
-    private static final String PIPE = "\\|";
+    private static final String REGEX_PIPE = "\\|";
+    private static final String PIPE = "|";
     private static final String DASH = "-";
     private static final String DEFAULT_MODE = "SINGLE";
     private static final String COMBO_MODE = "COMBO";
@@ -62,7 +63,7 @@ public class Tree {
     public void insertDualLeafNodes(final String fullPath) {
         String[] valueArray = getValueArray(fullPath);
 
-        String[] leafNodes = valueArray[valueArray.length - 1].split(PIPE);
+        String[] leafNodes = valueArray[valueArray.length - 1].split(REGEX_PIPE);
         if (leafNodes.length != 2) {
             throw new IllegalArgumentException("number of leaf nodes should be 2");
         }
@@ -72,11 +73,39 @@ public class Tree {
 
     /**
      *
+     * @param fullPathList
+     */
+    public void insertDualLeafNodes(final List<String> fullPathList) {
+        if (fullPathList == null) {
+            throw new IllegalArgumentException("fullPathList cannot be null");
+        }
+
+        for (String fullPath : fullPathList) {
+            insertDualLeafNodes(fullPath);
+        }
+    }
+
+    /**
+     *
      * @param fullPath
      */
-    public void insertMultipleNodes(final String fullPath) {
+    public void insertComboNodes(final String fullPath) {
         String[] valueArray = getValueArray(fullPath);
         insertValueArray(valueArray, COMBO_MODE);
+    }
+
+    /**
+     *
+     * @param fullPathList
+     */
+    public void insertComboNodes(final List<String> fullPathList) {
+        if (fullPathList == null) {
+            throw new IllegalArgumentException("fullPathList cannot be null");
+        }
+
+        for (String fullPath : fullPathList) {
+            insertComboNodes(fullPath);
+        }
     }
 
     /**
@@ -147,7 +176,7 @@ public class Tree {
         }
 
         for (int i = 0; i < children1.size(); i++) {
-            if (!children1.get(i).getValue().equals(children2.get(i).getValue())) {
+            if (!children1.get(i).equals(children2.get(i))) {
                 return false;
             }
 
@@ -210,7 +239,7 @@ public class Tree {
         }
 
         String[] valueArray = fullPath.trim().replaceFirst(DELIMITER, "").split(DELIMITER);
-        if (valueArray.length == 0) {
+        if (valueArray.length == 1 && valueArray[0].length() == 0) {
             throw new IllegalArgumentException("fullPath cannot be empty");
         }
 
@@ -234,7 +263,7 @@ public class Tree {
             String value = valueArray[level];
             if (level == 0) {
                 if (root == null) {
-                    root = new Node<String>(value, level);
+                    root = new Node<String>(value, null);
                     parentList = new ArrayList<Node<String>>();
                     parentList.add(root);
                 } else if (!root.getValue().equals(value)) {
@@ -246,7 +275,7 @@ public class Tree {
                     String[] explodedValueArray = explodeValue(value, mode);
 
                     for (String explodedValue : explodedValueArray) {
-                        newParentList.add(parent.addChild(explodedValue, level));
+                        newParentList.add(parent.addChild(explodedValue));
                     }
                 }
                 parentList = newParentList;
@@ -264,16 +293,20 @@ public class Tree {
             final String value,
             final String mode) {
         if (DEFAULT_MODE.equals(mode)) {
-            return value.split(PIPE);
+            return value.split(REGEX_PIPE);
         } else if (COMBO_MODE.equals(mode)) {
-            Combiner combiner = new Combiner(value.split(PIPE));
+            Combiner combiner = new Combiner(value.split(REGEX_PIPE));
             List<String> explodedElementList = combiner.getComboList();
-            return explodedElementList.toArray(new String[]{});
+            return explodedElementList.toArray(new String[] { });
         } else {
             throw new UnsupportedOperationException("unsupported mode: " + mode);
         }
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return root.toString().trim();
