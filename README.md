@@ -8,7 +8,7 @@ What's Inside
 -   depends on JUnit for testing
 -   build and dependency manager used is Maven
 -   src/main/java - main class is Tree
--   src/test/java - main class is TreeTest
+-   src/test/java - main class is TreeTest; sections are labeled from PART 1 to PART 6
 
 How to Run Test
 ---------------
