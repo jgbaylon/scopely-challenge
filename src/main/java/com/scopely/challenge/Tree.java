@@ -217,7 +217,9 @@ public class Tree {
      * @param node2
      * @return
      */
-    private boolean areSubTreesIdentical(Node<String> node1, Node<String> node2) {
+    private boolean areSubTreesIdentical(
+            final Node<String> node1,
+            final Node<String> node2) {
         List<Node<String>> children1 = new ArrayList<Node<String>>(node1.getChildren());
         List<Node<String>> children2 = new ArrayList<Node<String>>(node2.getChildren());
 
