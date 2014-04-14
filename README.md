@@ -12,4 +12,7 @@ What's Inside
 
 How to Run Test
 ---------------
+-   install Maven on your system (http://maven.apache.org/download.cgi)
+-   git clone git@github.com:jgbaylon/scopely-challenge.git
+-   cd scopely-challenge
 -   mvn test
