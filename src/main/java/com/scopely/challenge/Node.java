@@ -10,7 +10,7 @@ public class Node<T> {
 
     private final T value;
     private int level;
-    private final Node<T> parent;
+    private Node<T> parent;
     private final Set<Node<T>> children = new LinkedHashSet<Node<T>>();
 
     /**
