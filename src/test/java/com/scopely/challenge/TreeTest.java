@@ -10,6 +10,7 @@ import static org.junit.Assert.fail;
 
 public class TreeTest extends AbstractTest {
 
+    //PART 1
     @Test
     public void constructor_FullPathIsNull() {
         //given
@@ -171,6 +172,7 @@ public class TreeTest extends AbstractTest {
         }
     }
 
+    //PART 2
     @Test
     public void insertDualLeafNodes_FullPath() {
         //given
@@ -248,6 +250,7 @@ public class TreeTest extends AbstractTest {
         }
     }
 
+    //PART 3
     @Test
     public void insertComboNodes_FullPath_CombinatorialLeafNodes() {
         //given
@@ -271,6 +274,7 @@ public class TreeTest extends AbstractTest {
         System.out.println(tree);
     }
 
+    //PART 4
     @Test
     public void insertComboNodes_FullPath_CombinatorialNodesAtAnyLevel() {
         //given
@@ -340,6 +344,7 @@ public class TreeTest extends AbstractTest {
         }
     }
 
+    //PART 5
     @Test
     public void collapseCombinatorialTreeToPath_Simple() {
         //given
@@ -386,6 +391,7 @@ public class TreeTest extends AbstractTest {
         }
     }
 
+    //PART 6
     @Test
     public void pathsAreSynonyms() {
         //given
