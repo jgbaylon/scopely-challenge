@@ -8,21 +8,64 @@ import java.util.Set;
 
 public class Tree {
 
+    public static final String SINGLE_MODE = "SINGLE";
+    public static final String DUAL_MODE = "DUAL";
+    public static final String COMBO_MODE = "COMBO";
+
     private static final String DELIMITER = "/";
     private static final String REGEX_PIPE = "\\|";
     private static final String PIPE = "|";
     private static final String DASH = "-";
-    private static final String DEFAULT_MODE = "SINGLE";
-    private static final String COMBO_MODE = "COMBO";
 
+    private int singleModeCount = 0;
+    private int dualModeCount = 0;
+    private int comboModeCount = 0;
     private Node<String> root;
 
     /**
      *
-     * @param initialFullPath
+     * @param fullPath
+     * @param mode
      */
-    public Tree(final String initialFullPath) {
-        insertSingleNodes(initialFullPath);
+    public Tree(
+            final String fullPath,
+            final String mode) {
+        if (SINGLE_MODE.equals(mode)) {
+            insertSingleNodes(fullPath);
+        } else if (DUAL_MODE.equals(mode)) {
+            insertDualLeafNodes(fullPath);
+        } else if (COMBO_MODE.equals(mode)) {
+            insertComboNodes(fullPath);
+        } else {
+            throw new UnsupportedOperationException("unsupported mode: " + mode);
+        }
+    }
+
+    /**
+     *
+     * @param fullPathList
+     * @param mode
+     */
+    public Tree(
+            final List<String> fullPathList,
+            final String mode) {
+        if (SINGLE_MODE.equals(mode)) {
+            insertSingleNodes(fullPathList);
+        } else if (DUAL_MODE.equals(mode)) {
+            insertDualLeafNodes(fullPathList);
+        } else if (COMBO_MODE.equals(mode)) {
+            insertComboNodes(fullPathList);
+        } else {
+            throw new UnsupportedOperationException("unsupported mode: " + mode);
+        }
+    }
+
+    /**
+     *
+     * @param fullPath
+     */
+    public Tree(final String fullPath) {
+        this(fullPath, SINGLE_MODE);
     }
 
     /**
@@ -30,7 +73,7 @@ public class Tree {
      * @param fullPathList
      */
     public Tree(final List<String> fullPathList) {
-        insertSingleNodes(fullPathList);
+        this(fullPathList, SINGLE_MODE);
     }
 
     /**
@@ -39,7 +82,8 @@ public class Tree {
      */
     public void insertSingleNodes(final String fullPath) {
         String[] valueArray = getValueArray(fullPath);
-        insertValueArray(valueArray, DEFAULT_MODE);
+        insertValueArray(valueArray, SINGLE_MODE);
+        singleModeCount++;
     }
 
     /**
@@ -68,7 +112,8 @@ public class Tree {
             throw new IllegalArgumentException("number of leaf nodes should be 2");
         }
 
-        insertValueArray(valueArray, DEFAULT_MODE);
+        insertValueArray(valueArray, DUAL_MODE);
+        dualModeCount++;
     }
 
     /**
@@ -92,6 +137,7 @@ public class Tree {
     public void insertComboNodes(final String fullPath) {
         String[] valueArray = getValueArray(fullPath);
         insertValueArray(valueArray, COMBO_MODE);
+        comboModeCount++;
     }
 
     /**
@@ -113,6 +159,10 @@ public class Tree {
      * @return
      */
     public String collapseCombinatorialTreeToPath() {
+        if (singleModeCount > 0 || dualModeCount > 0 || comboModeCount != 1) {
+            throw new UnsupportedOperationException("tree is not a pure combinatorial tree");
+        }
+
         StringBuilder pathBuilder = new StringBuilder();
         pathBuilder.append(DELIMITER).append(root.getValue());
 
@@ -292,7 +342,9 @@ public class Tree {
     private String[] explodeValue(
             final String value,
             final String mode) {
-        if (DEFAULT_MODE.equals(mode)) {
+        if (SINGLE_MODE.equals(mode)) {
+            return value.split(REGEX_PIPE);
+        } else if (DUAL_MODE.equals(mode)) {
             return value.split(REGEX_PIPE);
         } else if (COMBO_MODE.equals(mode)) {
             Combiner combiner = new Combiner(value.split(REGEX_PIPE));

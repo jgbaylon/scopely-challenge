@@ -341,11 +341,10 @@ public class TreeTest extends AbstractTest {
     }
 
     @Test
-    public void collapseCombinatorialTreeToPath() {
+    public void collapseCombinatorialTreeToPath_Simple() {
         //given
-        String expectedPath = "/home/sports|music/misc|favorites";
-        Tree tree = new Tree("/home");
-        tree.insertComboNodes(expectedPath);
+        String expectedPath = "/home/sports/favorites";
+        Tree tree = new Tree(expectedPath, Tree.COMBO_MODE);
 
         //when
         String actualPath = tree.collapseCombinatorialTreeToPath();
@@ -356,10 +355,41 @@ public class TreeTest extends AbstractTest {
     }
 
     @Test
+    public void collapseCombinatorialTreeToPath_Complex() {
+        //given
+        String expectedPath = "/home/sports|music/misc|favorites";
+        Tree tree = new Tree(expectedPath, Tree.COMBO_MODE);
+
+        //when
+        String actualPath = tree.collapseCombinatorialTreeToPath();
+
+        //then
+        assertEquals(expectedPath, actualPath);
+        System.out.println(tree.collapseCombinatorialTreeToPath());
+    }
+
+    @Test
+    public void collapseCombinatorialTreeToPath_TreeIsNotPureCombinatorialTree() {
+        //given
+        Tree tree = new Tree("/home/sports|music/misc|favorites", Tree.COMBO_MODE);
+        tree.insertSingleNodes("/home/entertainment/television");
+
+        try {
+            //when
+            tree.collapseCombinatorialTreeToPath();
+            fail();
+        } catch (UnsupportedOperationException uoe) {
+            //then
+            assertEquals("tree is not a pure combinatorial tree", uoe.getMessage());
+        } catch (Exception e) {
+            fail();
+        }
+    }
+
+    @Test
     public void pathsAreSynonyms() {
         //given
-        Tree tree = new Tree("/home");
-        tree.insertComboNodes("/home/sports|music/misc|favorites");
+        Tree tree = new Tree("/home/sports|music/misc|favorites", Tree.COMBO_MODE);
 
         //when
         boolean pathsAreSynonyms = tree.pathsAreSynonyms("/home/sports", "/home/music");
@@ -372,8 +402,7 @@ public class TreeTest extends AbstractTest {
     @Test
     public void pathsAreNotSynonyms() {
         //given
-        Tree tree = new Tree("/home");
-        tree.insertComboNodes("/home/sports|music/misc|favorites");
+        Tree tree = new Tree("/home/sports|music/misc|favorites", Tree.COMBO_MODE);
         tree.insertComboNodes("/home/entertainment/misc");
 
         //when
