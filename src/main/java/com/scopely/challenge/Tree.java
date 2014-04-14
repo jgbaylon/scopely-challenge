@@ -171,7 +171,7 @@ public class Tree {
             StringBuilder comboBuilder = new StringBuilder();
             for (Node<String> child : parent.getChildren()) {
                 if (!child.getValue().contains(DASH)) {
-                    comboBuilder.append(child.getValue()).append("|");
+                    comboBuilder.append(child.getValue()).append(PIPE);
                 }
 
                 if (!child.getChildren().isEmpty()) {
