@@ -45,7 +45,7 @@ public class TreeTest extends AbstractTest {
     }
 
     @Test
-    public void constructor_FullPathIsContainsMultipleNodes() {
+    public void constructor_FullPathContainsMultipleNodes() {
         //given
         String fullPath = "root1|root2";
 

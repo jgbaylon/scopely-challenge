@@ -14,7 +14,7 @@ public class CombinerTest extends AbstractTest {
     public void constructor_ValueArrayIsNull() {
         try {
             //when
-            new Combiner(null);
+            new Combiner<String, String>(null);
             fail();
         } catch (IllegalArgumentException iae) {
             //then
@@ -27,7 +27,7 @@ public class CombinerTest extends AbstractTest {
     @Test
     public void constructor_ValueArrayIsEmpty() {
         //when
-        Combiner combiner = new Combiner(new String[] { });
+        Combiner<String, String> combiner = new Combiner<String, String>(new String[] { });
 
         //then
         assertEquals(0, combiner.getComboList().size());
@@ -37,7 +37,7 @@ public class CombinerTest extends AbstractTest {
     public void getComboList() {
         //given
         String[] valueArray = new String("t1|t2|t3|t4").split("\\|");
-        Combiner combiner = new Combiner(valueArray);
+        Combiner<String, String> combiner = new Combiner<String, String>(valueArray);
         String[] comboArray = {
                 "t1", "t1-t2", "t1-t2-t3", "t1-t2-t3-t4", "t1-t2-t4", "t1-t3", "t1-t3-t4", "t1-t4",
                 "t2", "t2-t3", "t2-t3-t4", "t2-t4", "t3", "t3-t4", "t4"

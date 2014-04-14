@@ -347,7 +347,7 @@ public class Tree {
         } else if (DUAL_MODE.equals(mode)) {
             return value.split(REGEX_PIPE);
         } else if (COMBO_MODE.equals(mode)) {
-            Combiner combiner = new Combiner(value.split(REGEX_PIPE));
+            Combiner<String, String> combiner = new Combiner<String, String>(value.split(REGEX_PIPE));
             List<String> explodedElementList = combiner.getComboList();
             return explodedElementList.toArray(new String[] { });
         } else {

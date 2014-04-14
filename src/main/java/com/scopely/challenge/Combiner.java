@@ -6,17 +6,17 @@ import com.scopely.challenge.builder.ValueBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Combiner {
+public class Combiner<ValueType, ReturnType> {
 
-    private List<String> comboList = new ArrayList<String>();
-    private List<String> holder = new ArrayList<String>();
-    private final String[] valueArray;
+    private List<ReturnType> comboList = new ArrayList<ReturnType>();
+    private List<ValueType> holder = new ArrayList<ValueType>();
+    private final ValueType[] valueArray;
 
     /**
      *
      * @param valueArray
      */
-    public Combiner(final String[] valueArray) {
+    public Combiner(final ValueType[] valueArray) {
         if (valueArray == null) {
             throw new IllegalArgumentException("valueArray cannot be null");
         }
@@ -28,7 +28,7 @@ public class Combiner {
      *
      * @return
      */
-    public List<String> getComboList() {
+    public List<ReturnType> getComboList() {
         return comboList;
     }
 
@@ -40,8 +40,8 @@ public class Combiner {
         for (int i = startIndex; i < valueArray.length; i++) {
             holder.add(valueArray[i]);
 
-            ValueBuilder<String, String> builder = new StringValueBuilderImpl();
-            for (String newValue : holder) {
+            ValueBuilder<ValueType, ReturnType> builder = (ValueBuilder<ValueType, ReturnType>) new StringValueBuilderImpl();
+            for (ValueType newValue : holder) {
                 builder.append(newValue);
             }
             comboList.add(builder.build());
