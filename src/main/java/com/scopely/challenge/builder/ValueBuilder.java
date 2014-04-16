@@ -15,4 +15,10 @@ public interface ValueBuilder<ValueType, ReturnType> {
      */
     public ReturnType build();
 
+    /**
+     *
+     * @return
+     */
+    public ValueBuilder<ValueType, ReturnType> clear();
+
 }

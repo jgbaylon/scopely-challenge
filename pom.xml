@@ -9,9 +9,9 @@
     <name>scopely-challenge</name>
 
     <scm>
-        <url>https://bitbucket.org/jgbaylon/scopely-challenge</url>
-        <connection>scm:git:git://bitbucket.org/jgbaylon/scopely-challenge.git</connection>
-        <developerConnection>scm:git:git@bitbucket.org:jgbaylon/scopely-challenge.git</developerConnection>
+        <url>https://github.com/jgbaylon/scopely-challenge</url>
+        <connection>scm:git:git://github.com/jgbaylon/scopely-challenge.git</connection>
+        <developerConnection>scm:git:git@github.com:jgbaylon/scopely-challenge.git</developerConnection>
     </scm>
 
     <build>

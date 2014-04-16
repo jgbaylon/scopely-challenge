@@ -1,5 +1,7 @@
 package com.scopely.challenge;
 
+import com.scopely.challenge.builder.StringValueBuilderImpl;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -349,7 +351,7 @@ public class Tree {
         } else if (DUAL_MODE.equals(mode)) {
             return value.split(REGEX_PIPE);
         } else if (COMBO_MODE.equals(mode)) {
-            Combiner<String, String> combiner = new Combiner<String, String>(value.split(REGEX_PIPE));
+            Combiner<String, String> combiner = new Combiner<String, String>(new StringValueBuilderImpl(), value.split(REGEX_PIPE));
             List<String> explodedElementList = combiner.getComboList();
             return explodedElementList.toArray(new String[] { });
         } else {

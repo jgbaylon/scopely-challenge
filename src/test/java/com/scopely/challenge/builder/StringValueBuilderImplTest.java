@@ -17,9 +17,9 @@ public class StringValueBuilderImplTest extends AbstractTest {
             //when
             valueBuilder.build();
             fail();
-        } catch (StringIndexOutOfBoundsException sbe) {
+        } catch (UnsupportedOperationException e) {
             //then
-            assertEquals("String index out of range: -1", sbe.getMessage());
+            assertEquals("cannot build on empty values", e.getMessage());
         } catch (Exception e) {
             fail();
         }
@@ -57,6 +57,26 @@ public class StringValueBuilderImplTest extends AbstractTest {
         } catch (IllegalArgumentException e) {
             //then
             assertEquals("value cannot be null or empty", e.getMessage());
+        } catch (Exception e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void clear() {
+        //given
+        valueBuilder.append("favorites").append("   ").append("default");
+
+
+        //when
+        valueBuilder.clear();
+
+        //then
+        try {
+            valueBuilder.build();
+            fail();
+        } catch (UnsupportedOperationException e) {
+            assertEquals("cannot build on empty values", e.getMessage());
         } catch (Exception e) {
             fail();
         }

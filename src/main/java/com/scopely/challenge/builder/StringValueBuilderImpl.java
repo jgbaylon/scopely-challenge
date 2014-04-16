@@ -26,8 +26,21 @@ public class StringValueBuilderImpl implements ValueBuilder<String, String> {
      */
     @Override
     public String build() {
+        if (builder.toString().length() == 0) {
+            throw new UnsupportedOperationException("cannot build on empty values");
+        }
         builder.deleteCharAt(builder.lastIndexOf(DASH));
         return builder.toString();
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public ValueBuilder<String, String> clear() {
+        builder = new StringBuilder();
+        return this;
     }
 
 }
