@@ -182,7 +182,7 @@ public class Tree {
                     parent = null;
                 }
             }
-            comboBuilder.deleteCharAt(comboBuilder.lastIndexOf("|"));
+            comboBuilder.deleteCharAt(comboBuilder.lastIndexOf(PIPE));
             pathBuilder.append(DELIMITER).append(comboBuilder.toString());
         }
 
