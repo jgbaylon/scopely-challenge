@@ -14,6 +14,7 @@ public class Combiner<ValueType, ReturnType> {
 
     /**
      *
+     * @param valueBuilder
      * @param valueArray
      */
     public Combiner(
